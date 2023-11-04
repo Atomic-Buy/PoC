@@ -8,3 +8,4 @@ circom-ciminion/
 *zkey 
 *.json 
 *.wtns 
+/data_prep/target 
