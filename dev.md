@@ -1,0 +1,4 @@
+- [ ] test Ciminion encryption, based on https://research.kudelskisecurity.com/2022/05/02/implementing-a-zk-focused-authenticated-encryption-scheme/
+- [ ] build recursive hash based on poseidon 
+- [ ] build proof1 
+- [ ] build proof 2

@@ -1,0 +1,10 @@
+circomlib-circom2.1/
+circom-ciminion/ 
+*.r1cs
+*.wasm
+*_cpp 
+*_js 
+*ptau 
+*zkey 
+*.json 
+*.wtns 
