@@ -7,6 +7,7 @@ use num_traits::Zero;
 use rand::Rng;
 use std::io::prelude::*;
 use num_bigint::BigUint;
+
 #[derive(Clone, Copy)]
 pub struct Num{
     data: [u8; 30], 
@@ -108,6 +109,20 @@ impl Data15K{
         file.write_all(json.as_bytes()).unwrap();
         Ok(())
     }
+    /// export to circom json 
+    pub fn export_circom_json(&self, json_path: &str) -> Result<(), String>{
+        // convert the data to a vector of string
+        let mut data_vec: Vec<String> = Vec::new();
+        for i in 0..512{
+            data_vec.push(self.data[i].to_decimal());
+        }
+        // build the json output format as { "in": ["123456789012345678901234567890", "123456789012345678901234567890", ...] }
+        let json = format!("{{ \"in\": {} }}", serde_json::to_string(&data_vec).unwrap());
+        // write the json string to the file
+        let mut file = std::fs::File::create(json_path).unwrap();
+        file.write_all(json.as_bytes()).unwrap();
+        Ok(())
+    }
 
     /// read json and check if the json is aligned with the data15K
     pub fn check_json(self, json_path: &str) -> bool {
@@ -173,6 +188,26 @@ mod tests {
         // delete all test files 
         std::fs::remove_file("test.txt").unwrap();
         std::fs::remove_file("test.json").unwrap();
+    }
+    /// test the Data15K's export_circom_json function
+    #[test]
+    fn test_circom_json() {
+        // create a file that is 14K 
+        let mut file = std::fs::File::create("test.txt").unwrap();
+        let mut data = Vec::new();
+        for i in 0..14*1024{
+            data.push(0);
+        }
+        file.write_all(&data).unwrap();
+        // create a data15K from the file
+        let data = Data15K::new("test.txt").unwrap();
+        for i in 0..512{
+            println!("{}", data.data[i].to_decimal());
+        }
+        // export to circom json 
+        data.export_circom_json("test_circom.json").unwrap();
+        // delete it 
+        std::fs::remove_file("test_circom.json").unwrap();
     }
     
 }

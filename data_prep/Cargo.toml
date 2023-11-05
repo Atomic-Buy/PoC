@@ -12,3 +12,4 @@ num-bigint = { vertion = "0.4.4", features = ["serde"]}
 num-bigint-dig = "0.7.0"
 num-traits = "0.2.14"
 serde = { version = "1.0", features = ["derive"] }
+clap = { version = "4.4.7", features = ["derive"] }
