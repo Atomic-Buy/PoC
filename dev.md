@@ -1,6 +1,9 @@
-- [ ] test Ciminion encryption, based on https://research.kudelskisecurity.com/2022/05/02/implementing-a-zk-focused-authenticated-encryption-scheme/
+- [x] test Ciminion encryption, based on https://research.kudelskisecurity.com/2022/05/02/implementing-a-zk-focused-authenticated-encryption-scheme/
 - [x] build recursive hash based on poseidon 
 - [x] add data preparation code for circom proof
 - [x] build proof1 
   - [x] test prove1, pass 
-- [ ] build proof 2
+- [x] build proof 2
+- build proof 3 
+- [ ]  write data prepration code for prove 2 and prove3 
+- [ ]  implement the decryption of ciminion in rust 

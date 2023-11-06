@@ -9,3 +9,5 @@ circom-ciminion/
 *.json 
 *.wtns 
 /data_prep/target 
+/test/node_modules/
+/test/package-lock.json
