@@ -24,7 +24,7 @@ Commit any content with size less than 15 KB using recursive poseidon hash.  In 
 1 root hash 
 ```
  
-$$ h = recursive_poseidon(C)$$
+$$ h = recursivePoseidon(C)$$
 
 ### Prove TWO 
 Commit 512 numbers using [Ciminion](https://eprint.iacr.org/2021/267) Symmetric Encryption. The Ciminion Circom is implemented by
@@ -49,8 +49,14 @@ In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public
 - This claim that **"I provides the `ciphertext` that represened by `h` in Prove2 and I give you the private key `sk` which can decode the `ciphertext` to plaintext.  "**. 
 
 
+## Cost 
 
-
+| method 	| pp size 	| vp size 	| prover time 	| verifier time 	| proof size 	|
+|--------	|---------	|---------	|-------------	|---------------	|-------------	|
+|p1-G16     |         	|         	|             	|               	|             	|
+|p2-G16     |         	|         	|             	|               	|             	|
+|p3-G16 	|         	|           |               |             	    |               |
+|        	|         	|         	|             	|               	|             	|
 ## Dependencies 
 - circom_tester: 
 - circomlib 2.1: https://github.com/iden3/circomlib/tree/circom2.1

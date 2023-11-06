@@ -10,7 +10,7 @@ use num_bigint::BigUint;
 
 #[derive(Clone, Copy)]
 pub struct Num{
-    data: [u8; 30], 
+    pub data: [u8; 30], 
 }
 
 impl Num {
@@ -55,9 +55,10 @@ impl Num {
        
     }
 }
+#[derive(Clone, Copy)]
 pub struct Data15K{
     /// a array of 512 Num 
-    data: [Num; 512],
+    pub data: [Num; 512],
 }
 
 impl Data15K{
