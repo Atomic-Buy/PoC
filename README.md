@@ -48,7 +48,17 @@ In Prove 2, we prove the following claim: `h == Enc(public IV, nonce, masterkey[
 In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public ciphertext[N*2] ) == h && Enc(public IV, nonce2, sk[4], masterkey[2] ).ciphertext == c2[2]`, where `sk[4] = [IV, nonce, masterkey[0], masterkey[1] ]`
 - This claim that **"I provides the `ciphertext` that represened by `h` in Prove2 and I give you the private key `sk` which can decode the `ciphertext` to plaintext.  "**. 
 
+## Usage 
+- Data prep: build the input json for the circom from any `<15KB` files. 
+    - Run `cargo run --help` in `/data_prep`, this will help you put the `input.json` in the right position. 
 
+- Run circom with snarkjs: 
+    - in  `/prove*`: 
+        - make sure you have the right ptau setup params in each folder, see `makefile` for more detail.  
+        - run `make circom`: This will compile circom code into wasm, r1cs and c. Then we will generate the witness using the cpp lib. 
+        - run `make key`: This will setup the groth16 keys for the specific circuits. 
+        - run `make proof`: generate the proof 
+        - run `make verify`: verify the proof using snarkjs wasm. 
 ## Cost 
 
 | method 	| pp size 	| vp size 	| prover time 	| verifier time 	| proof size 	|
@@ -58,6 +68,6 @@ In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public
 |p3-G16 	|         	|           |               |             	    |               |
 |        	|         	|         	|             	|               	|             	|
 ## Dependencies 
-- circom_tester: 
+- circom_tester: https://github.com/iden3/circom_tester
 - circomlib 2.1: https://github.com/iden3/circomlib/tree/circom2.1
 - circom ciminion: https://github.com/kudelskisecurity/circom-ciminion
