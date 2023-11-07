@@ -1,16 +1,22 @@
-extern crate rand;
-extern crate serde;
-extern crate serde_json;
 
-extern crate num_bigint;
-use num_traits::Zero;
 use rand::Rng;
 use std::io::prelude::*;
 use num_bigint::BigUint;
 
 use crate::prove1::{Num, Data15K};
 
-const IV:&str = "123456789";
+/* 
+// ark circom 
+use ark_circom::{CircomBuilder, CircomConfig};
+use ark_std::rand::thread_rng;
+
+use ark_bn254::Bn254;
+use ark_crypto_primitives::snark::SNARK;
+use ark_groth16::Groth16;
+
+type GrothBn = Groth16<Bn254>;
+*/
+const IV: &str = "123456789";
 
 
 #[derive(Clone)]
@@ -101,6 +107,7 @@ impl EncInput512{
         circom_json_file.write_all(circom_json.to_string().as_bytes()).unwrap();
 
     }
+    
 }
 
 #[cfg(test)]

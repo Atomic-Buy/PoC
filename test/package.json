@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "chai": "^4.3.10",
+    "circom_tester": "^0.0.20",
+    "mocha": "^10.2.0"
+  }
+}

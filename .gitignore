@@ -6,8 +6,10 @@ circom-ciminion/
 *_js 
 *ptau 
 *zkey 
-*.json 
 *.wtns 
 /data_prep/target 
 /test/node_modules/
 /test/package-lock.json
+/prove*/*.json
+/dec/*.json 
+/data_prep/*.json 

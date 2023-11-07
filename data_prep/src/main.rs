@@ -1,5 +1,11 @@
+extern crate rand;
+extern crate serde;
+extern crate serde_json;
+
+extern crate num_bigint;
 mod prove1; 
 mod prove2; 
+mod prove3; 
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser)]

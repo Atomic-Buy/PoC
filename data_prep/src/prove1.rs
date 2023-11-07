@@ -1,8 +1,4 @@
-extern crate rand;
-extern crate serde;
-extern crate serde_json;
 
-extern crate num_bigint;
 use num_traits::Zero;
 use rand::Rng;
 use std::io::prelude::*;
