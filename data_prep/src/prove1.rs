@@ -70,6 +70,13 @@ impl Data15K{
             return Err("the file is too large".to_string());
         }
         // if the byte length < 15K, padding with 0 add the edd 
+        if buffer.len() == 0{
+            return Err("the file is empty".to_string());
+        }
+        if buffer.len() < 15*1024{
+            // push a indicator number which means the number of padding 0s
+            buffer.push((15*1024-buffer.len() -1) as u8);
+        }
         while buffer.len() < 15*1024{
             buffer.push(0);
         }
@@ -84,6 +91,7 @@ impl Data15K{
         }
         Ok(Data15K{data: data})
     }
+
     pub fn new_rand() -> Data15K{
         let mut data = [Num::new_rand(); 512];
         for i in 0..512{
@@ -140,6 +148,72 @@ impl Data15K{
             }
         }
         true
+    }
+    /// the reverse function of new, write the data15K to a file, trim the padding 0s
+    /// if trim is true, trim the padding 0s, otherwise, write all 15K bytes to the file
+    pub fn to_src(&self, src_path: &str, trim: bool ) -> Result<(), String> {
+        // convert the data15K to a vector of bytes
+        let mut data_vec: Vec<u8> = Vec::new();
+        for i in 0..512{
+            for j in 0..30{
+                data_vec.push(self.data[i].data[j]);
+            }
+        }
+        if trim{
+            // trim the padding 0s, until meet the indicator number, which is the number of padding 0s
+            let mut i = 15*1024-1;
+            let mut zero_cnt = 0; 
+            while data_vec[i] == 0{
+                i -= 1;
+                zero_cnt += 1;
+            }
+            // check if the indicator number is correct
+            if data_vec[i] != ((zero_cnt) as u8){
+                return Err("the indicator number is not correct".to_string());
+            }
+            // trim the padding 0s and the indicator number
+            data_vec.truncate(i);
+        }
+        // write the data_vec to the file
+        let mut file = std::fs::File::create(src_path).unwrap();
+        file.write_all(&data_vec).unwrap();
+
+        Ok(())
+    }
+    /// get input json plaintext json list and convert it to a Data15K
+    pub fn from_circom_pt(pt_path: &str) -> Data15K{
+        let mut pt: Vec<BigUint> = Vec::new(); 
+        // read the pt from pt_path
+        let mut pt_file = std::fs::File::open(pt_path).unwrap();
+        let mut pt_str = String::new();
+        pt_file.read_to_string(&mut pt_str).unwrap();
+        // parse as json value 
+        let pt_json: serde_json::Value = serde_json::from_str(&pt_str).unwrap();
+        // pt_json is a [string;512]
+        let pt_str_vec: Vec<String> = serde_json::from_value(pt_json["in"].clone()).unwrap();
+        //convert the str_vec to a biguint vec
+        for i in 0..512{
+            // parse the string as radix 10
+            let t = BigUint::parse_bytes(pt_str_vec[i].as_bytes(), 10).unwrap();
+            pt.push(t);
+        }
+        // convert the biguint vec to a data15k
+        // first we convert each biguint to a 30 bytes array
+        let mut data = [Num::new_zero(); 512];
+        for i in 0..512{
+            let mut data_arr: [u8; 30] = [0; 30];
+            let t = pt[i].to_bytes_be();
+            // the t may not be a 30 bytes long, so we need to left padding it with 0s
+            for j in 0..30{
+                if j < t.len(){
+                    data_arr[30-t.len()+j] = t[j];
+                }
+            }
+            data[i] = Num{data: data_arr};
+        }
+        // return the data15k
+        Data15K{data: data}
+
     }
     
 
@@ -205,6 +279,46 @@ mod tests {
         data.export_circom_json("test_circom.json").unwrap();
         // delete it 
         std::fs::remove_file("test_circom.json").unwrap();
+    }
+    #[test]
+    fn test_pt_2_src(){
+        //read file './src.jpg' 
+        let mut file = std::fs::File::open("./src.jpg").unwrap();
+        let mut src1 = Vec::new();
+        file.read_to_end(&mut src1).unwrap();
+        // create a data15K from the file
+        let data = Data15K::new("./src.jpg").unwrap();
+        // export to circom json
+        data.export_circom_json("test_circom.json").unwrap();
+        // restore a data15K from circom json
+        let data2 = Data15K::from_circom_pt("test_circom.json");
+        // convert data2 to src
+        data2.to_src("test_src.jpg", true).unwrap();
+        // make sure the src is the same as the original file
+        let mut file2 = std::fs::File::open("test_src.jpg").unwrap();
+        let mut src2 = Vec::new();
+        file2.read_to_end(&mut src2).unwrap();
+        assert_eq!(src2.len() , src1.len()); 
+        let mut dff_cnt = 0; 
+        for i in 0..src2.len(){
+            if src2[i] != src1[i]{
+                dff_cnt += 1;
+            }
+        }
+        // log the diff_cnt and the diff bytes in stderr 
+        println!("total bytes: {}", src2.len());
+        println!("diff_cnt: {}", dff_cnt);
+        println!("diff bytes: ");
+        for i in 0..src2.len(){
+            if src2[i] != src1[i]{
+                println!("{}: {} {}", i, src1[i], src2[i]);
+            }
+        }
+        assert_eq!(dff_cnt, 0); 
+        // delete the test files
+        std::fs::remove_file("test_circom.json").unwrap();
+        //std::fs::remove_file("test_src.jpg").unwrap();
+
     }
     
 }

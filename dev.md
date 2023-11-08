@@ -5,7 +5,8 @@
   - [x] test prove1, pass 
 - [x] build proof 2
 - build proof 3 
-- [ ]  write data prepration code for prove 2 and prove3 
+- [x]  write data prepration code for prove 2 and prove3 
   - [x]  p2
   - [x]  p3
-- [ ]  implement the decryption of ciminion in rust 
+- [X]  implement the decryption of ciminion in rust 
+- [ ] cli restruct, make it easier. 

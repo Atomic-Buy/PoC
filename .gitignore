@@ -13,3 +13,4 @@ circom-ciminion/
 /prove*/*.json
 /dec/*.json 
 /data_prep/*.json 
+/data_prep/*.jpg

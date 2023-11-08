@@ -42,11 +42,13 @@ Outputs:
 
 In Prove 2, we prove the following claim: `h == Enc(public IV, nonce, masterkey[2], plaintext[N * 2]).TAG`
 - This claim that **"I have some plaintext and its MAC is `h` "**. 
+- WE have two circom `prove2_ct.circom` will make the ciphertext public in the output, while the `prove_mac.circom` will not output ciphertext. 
 
 ### Prove THREE 
 
 In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public ciphertext[N*2] ) == h && Enc(public IV, nonce2, sk[4], masterkey[2] ).ciphertext == c2[2]`, where `sk[4] = [IV, nonce, masterkey[0], masterkey[1] ]`
 - This claim that **"I provides the `ciphertext` that represened by `h` in Prove2 and I give you the private key `sk` which can decode the `ciphertext` to plaintext.  "**. 
+- Like prove2, we make two circom, one with the ciphertext as public, and the other make the cipehrtext private, which will signaificantly reduce the verification cost. 
 
 ## Usage 
 - Data prep: build the input json for the circom from any `<15KB` files. 
@@ -59,6 +61,13 @@ In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public
         - run `make key`: This will setup the groth16 keys for the specific circuits. 
         - run `make proof`: generate the proof 
         - run `make verify`: verify the proof using snarkjs wasm. 
+
+## Test Decryption 
+In `/test` folder we test the outputs generated for snarkjs: 
+- In `sk_dec.js`: we test if the ciphertext of seller's keys encrypted by buyer's key can be decrypted. 
+- In `pt_dec.js`: we test if the seller's key decrypted for ciphertext can be used to decrypt the ciphertext of content smaller than 15KB.
+
+To run the test, install the dependecies in `/test/package.json` and run `npx mocha *.js`. 
 ## Cost 
 
 | method 	| pp size 	| vp size 	| prover time 	| verifier time 	| proof size 	|
