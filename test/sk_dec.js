@@ -35,6 +35,11 @@ describe("Ciminion - encryption operation", function () {
     );
     let witness_dec;
     witness_dec = await circuit_dec.calculateWitness(ciminion_input_dec, true);
+    let t = await circuit_dec.getDecoratedOutput(witness_dec);
+    // save in file as plaintext 
+    const fs = require("fs");
+    fs.writeFileSync("plaintext.json", JSON.stringify(t));
+    
 
     await circuit_dec.assertOut(witness_dec, {
       PT: [

@@ -47,4 +47,3 @@ template hash512(){
     out <== l1.out[0];
 }
 
-component main = hash512(); 

@@ -50,6 +50,9 @@ In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public
 - This claim that **"I provides the `ciphertext` that represened by `h` in Prove2 and I give you the private key `sk` which can decode the `ciphertext` to plaintext.  "**. 
 - Like prove2, we make two circom, one with the ciphertext as public, and the other make the cipehrtext private, which will signaificantly reduce the verification cost. 
 
+### Prove Four 
+
+`PoD` for atomic buy ![](./pod.png)
 ## Usage 
 - Data prep: build the input json for the circom from any `<15KB` files. 
     - Run `cargo run --help` in `/data_prep`, this will help you put the `input.json` in the right position. 
@@ -61,6 +64,7 @@ In Prove 3, we prove the claim that: `MAC(public IV, nonce,  masterkey[2],public
         - run `make key`: This will setup the groth16 keys for the specific circuits. 
         - run `make proof`: generate the proof 
         - run `make verify`: verify the proof using snarkjs wasm. 
+
 
 ## Test Decryption 
 In `/test` folder we test the outputs generated for snarkjs: 
